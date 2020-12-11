@@ -1,3 +1,4 @@
+{-# LANGUAGE ApplicativeDo   #-}
 module Day9 where
   import Data.Vector (Vector)
   import qualified Data.Vector as Vec
