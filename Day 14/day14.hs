@@ -35,14 +35,14 @@ module Day14 where
     Mask newMask -> runInstructions2 (allMasks newMask [""]) m is
 
   applyMask :: String -> Int -> Int
-  applyMask mask val = applyMask' (reverse mask) val 0
+  applyMask mask val = go (reverse mask) val 0
     where
-      applyMask' :: String -> Int -> Int -> Int
-      applyMask' [] val _ = val
-      applyMask' (m:ms) val bitNo
-        | m == '0' = applyMask' ms (clearBit val bitNo) $ bitNo + 1
-        | m == '1' = applyMask' ms (setBit val bitNo) $ bitNo + 1
-        | otherwise = applyMask' ms val $ bitNo + 1
+      go :: String -> Int -> Int -> Int
+      go [] val _ = val
+      go (m:ms) val bitNo
+        | m == '0' = go ms (clearBit val bitNo) $ bitNo + 1
+        | m == '1' = go ms (setBit val bitNo) $ bitNo + 1
+        | otherwise = go ms val $ bitNo + 1
 
   allMasks :: String -> [String] -> [String]
   allMasks [] masks = masks
