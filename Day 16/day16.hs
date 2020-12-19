@@ -1,14 +1,14 @@
 module Day16 where
   import Data.List.Split
   import Data.Ix
-  import Data.Set (Set)
+  import Data.Set (Set, (\\))
   import qualified Data.Set as Set
   import Data.Vector (Vector)
   import qualified Data.Vector as Vec
   import Field (Field(..))
   import qualified Field
   import Data.Sort
-  import Data.List
+  import Data.List (isPrefixOf)
 
   main :: IO ()
   main = do
@@ -46,7 +46,7 @@ module Day16 where
   fieldToIndex :: Set Int -> [(Field, Set Int)] -> [(Int, String)]
   fieldToIndex _ [] = []
   fieldToIndex used ((f,s):fs) = (num, fieldName f):fieldToIndex (Set.insert num used) fs
-    where num = head $ Set.toList $ Set.difference s used
+    where num = head $ Set.toList $ s \\ used
 
   sumInvalid :: [Int] -> Set Int -> Int
   sumInvalid [] valid = 0
