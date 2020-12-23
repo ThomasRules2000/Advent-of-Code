@@ -1,4 +1,4 @@
-module Pair where
+module Util.Pair where
 
   data Pair a = Pair a a deriving (Eq, Ord, Show)
 

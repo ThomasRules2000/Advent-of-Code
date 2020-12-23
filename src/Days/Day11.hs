@@ -1,18 +1,29 @@
-{-# LANGUAGE ApplicativeDo   #-}
-module Day11 where
+module Days.Day11 where
   import Data.Matrix (Matrix)
   import qualified Data.Matrix as Matrix
   import Data.Maybe
   import Control.Monad
   import Data.Bifunctor
+  import qualified Program.RunDay as R (runDay)
+
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
 
   type SeatMatrix = Matrix (Maybe Bool)
 
-  main :: IO ()
-  main = do
-    matrix <- fmap processSeat . Matrix.fromLists . lines <$> readFile "input.txt"
-    print $ gameOfLife 1 1 matrix matrix
-    print $ gameOfLife2 1 1 matrix matrix
+  type Input = SeatMatrix
+
+  type Output1 = Int
+  type Output2 = Int
+
+  parser :: String -> Input
+  parser = fmap processSeat . Matrix.fromLists . lines
+
+  part1 :: Input -> Output1
+  part1 matrix = gameOfLife 1 1 matrix matrix
+
+  part2 :: Input -> Output2
+  part2 matrix = gameOfLife2 1 1 matrix matrix
 
   processSeat :: Char -> Maybe Bool
   processSeat '#' = Just True

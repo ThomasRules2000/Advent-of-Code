@@ -1,4 +1,4 @@
-module Field where
+module Util.Field where
   import Data.IntSet
 
   data Field = Field { fieldName :: String,

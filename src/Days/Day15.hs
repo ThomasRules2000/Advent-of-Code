@@ -1,17 +1,28 @@
-module Day15 where
+module Days.Day15 where
   import Data.IntMap.Strict (IntMap)
   import qualified Data.IntMap.Strict as IntMap
+  import Data.Tuple.Extra
+  import qualified Program.RunDay as R (runDay)
+
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
+
+  type Input = (Int, Int, IntMap Int)
+
+  type Output1 = Int
+  type Output2 = Int
 
   startingNumbers :: [Int]
   startingNumbers = [11,0,1,10,5,19]
 
-  main :: IO ()
-  main = do
-    let lastOccurences = IntMap.fromList $ init $ zip startingNumbers [0..]
-    let startTurn = length startingNumbers
-    let startNo = last startingNumbers
-    print $ doTurn 2020 startTurn startNo lastOccurences
-    print $ doTurn 30000000 startTurn startNo lastOccurences
+  parser :: String -> Input
+  parser = const (length startingNumbers, last startingNumbers, IntMap.fromList $ init $ zip startingNumbers [0..])
+
+  part1 :: Input -> Output1
+  part1 = uncurry3 (doTurn 2020)
+
+  part2 :: Input -> Output2
+  part2 = uncurry3 (doTurn 30000000)
 
   doTurn :: Int -> Int -> Int -> IntMap Int -> Int
   doTurn endTurn turnNo prevNo m

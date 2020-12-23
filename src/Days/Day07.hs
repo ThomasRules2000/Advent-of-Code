@@ -1,5 +1,4 @@
-{-# LANGUAGE ApplicativeDo   #-}
-module Day7 where
+module Days.Day07 where
   import Data.List.Split
   import Data.Char
   import Data.Map.Strict (Map)
@@ -8,12 +7,24 @@ module Day7 where
   import qualified Data.Set as Set
   import Data.Sequence (Seq(..), (<|), (|>))
   import qualified Data.Sequence as Seq
+  import qualified Program.RunDay as R (runDay)
 
-  main :: IO ()
-  main = do
-    bags <- processTuples . map (listToTuple . splitOn " contain ") . lines <$> readFile "input.txt"
-    print $ getNumAncestors bags bags (Seq.singleton "shiny gold") (Set.singleton "shiny gold")
-    print $ getNumDecendants "shiny gold" $ Map.fromList bags
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
+
+  type Input = [(String, Map String Int)]
+
+  type Output1 = Int
+  type Output2 = Int
+
+  parser :: String -> Input
+  parser = processTuples . map (listToTuple . splitOn " contain ") . lines
+
+  part1 :: Input -> Output1
+  part1 bags = getNumAncestors bags bags (Seq.singleton "shiny gold") (Set.singleton "shiny gold")
+
+  part2 :: Input -> Output2
+  part2 = getNumDecendants "shiny gold" . Map.fromList
 
   listToTuple :: [a] -> (a, a)
   listToTuple [x,y] = (x,y)

@@ -1,4 +1,4 @@
-module Day17 where
+module Days.Day17OLD where
   import Data.Vector (Vector)
   import qualified Data.Vector as Vec
   import Data.Set (Set)

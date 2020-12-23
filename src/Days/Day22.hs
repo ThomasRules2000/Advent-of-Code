@@ -1,4 +1,4 @@
-module Day22 where
+module Days.Day22 where
   import Data.List.Split
   import Data.Vector (Vector)
   import qualified Data.Vector as Vec
@@ -8,12 +8,25 @@ module Day22 where
   import Data.Sequence (Seq(..), (<|), (|>))
   import qualified Data.Sequence as Seq
   import Data.Foldable (toList)
+  import Util.Util
+  import qualified Program.RunDay as R (runDay)
 
-  main :: IO ()
-  main = do
-    [p1, p2] <- map (Seq.fromList . map read . tail . lines) . splitOn "\n\n" <$> readFile "input.txt" :: IO [Seq Int]
-    print $ combat p1 p2
-    print $ calcScore $ fst $ recCombat p1 p2 Set.empty
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
+
+  type Input = (Seq Int, Seq Int)
+
+  type Output1 = Int
+  type Output2 = Int
+
+  parser :: String -> Input
+  parser = listToTuple . map (Seq.fromList . map read . tail . lines) . splitOn "\n\n" 
+
+  part1 :: Input -> Output1
+  part1 = uncurry combat
+
+  part2 :: Input -> Output2
+  part2 = calcScore . fst . flip (uncurry recCombat) Set.empty 
 
   combat :: Seq Int -> Seq Int -> Int
   combat Empty p2 = calcScore p2

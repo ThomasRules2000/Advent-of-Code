@@ -1,4 +1,4 @@
-module Tile where
+module Util.Tile where
   import Data.Matrix (Matrix)
   import qualified Data.Matrix as Matrix
   import Data.Vector (Vector)

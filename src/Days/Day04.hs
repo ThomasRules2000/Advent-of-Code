@@ -1,22 +1,31 @@
-{-# LANGUAGE ApplicativeDo   #-}
-module Day4 where
+module Days.Day04 where
   import Data.Map.Strict (Map)
   import qualified Data.Map.Strict as Map
   import Data.List.Split
   import Text.Read
   import Data.Maybe
+  import Util.Util
+  import qualified Program.RunDay as R (runDay)
 
-  main :: IO ()
-  main = do
-    passports <- map ((Map.fromList . map (listToTuple . splitOn ":")) . words) . splitOn "\n\n" <$> readFile "input.txt"
-    print $ length $ filter (`containsKeys` ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]) passports
-    print $ length $ filter (fromMaybe False . validateFields) passports
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
 
-  listToTuple :: [a] -> (a,a)
-  listToTuple [x,y] = (x,y)
+  type Input = [Map String String]
 
-  containsKeys :: Ord k =>  Map k v -> [k] -> Bool
-  containsKeys m = all (`Map.member` m)
+  type Output1 = Int
+  type Output2 = Int
+
+  -- PARSER --
+  parser :: String -> Input
+  parser = map ((Map.fromList . map (listToTuple . splitOn ":")) . words) . splitOn "\n\n"
+
+  -- PART 1 --
+  part1 :: Input -> Output1
+  part1 = length . filter (`containsKeys` ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"])
+
+  -- PART 2 --
+  part2 :: Input -> Output2
+  part2 = length . filter (fromMaybe False . validateFields)
 
   validateFields :: Map String String -> Maybe Bool
   validateFields m = do

@@ -1,5 +1,4 @@
-{-# LANGUAGE ApplicativeDo   #-}
-module Days.Day01 where
+module Days.Day01 (runDay) where
   import qualified Program.RunDay as R (runDay)
 
   runDay :: String -> IO ()

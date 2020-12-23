@@ -1,20 +1,30 @@
-{-# LANGUAGE ApplicativeDo   #-}
-module Day14 where
+module Days.Day14 where
   import Data.List.Split
   import Data.Bits
   import Data.Map.Strict (Map)
   import qualified Data.Map.Strict as Map
-  import Debug.Trace
+  import qualified Program.RunDay as R (runDay)
+
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
 
   data Instruction = Mem Int Int
                    | Mask [Maybe Bool]
                    deriving (Eq, Show)
 
-  main :: IO ()
-  main = do
-    instructions <- processTuples . map (listToTuple . splitOn " = ") . lines <$> readFile "input.txt"
-    print $ runInstructions  [] Map.empty instructions
-    print $ runInstructions2 [] Map.empty instructions
+  type Input = [Instruction]
+
+  type Output1 = Int
+  type Output2 = Int
+
+  parser :: String -> Input
+  parser = processTuples . map (listToTuple . splitOn " = ") . lines
+
+  part1 :: Input -> Output1
+  part1 = runInstructions [] Map.empty
+
+  part2 :: Input -> Output2
+  part2 = runInstructions2 [] Map.empty
 
   processTuples :: [(String, String)] -> [Instruction]
   processTuples [] = []

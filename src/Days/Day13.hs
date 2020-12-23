@@ -1,16 +1,27 @@
-{-# LANGUAGE ApplicativeDo   #-}
-module Day13 where
+module Days.Day13 where
   import Data.List.Split
   import Data.Maybe
   import Text.Read (readMaybe)
+  import qualified Program.RunDay as R (runDay)
 
-  main :: IO ()
-  main = do
-    [s, b] <- lines <$> readFile "input.txt"
-    let buses = readMaybe <$> splitOn "," b :: [Maybe Int]
-    print $ waitTime (read s) 0 $ catMaybes buses
-    let busTuples = tail $ countNothings buses 0 0
-    print $ consecDeps 0 1 0 busTuples busTuples
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
+
+  type Input = (String, [Maybe Int])
+
+  type Output1 = Int
+  type Output2 = Int
+
+  parser :: String -> Input
+  parser inp = (s, readMaybe <$> splitOn "," b)
+    where [s, b] = lines inp
+
+  part1 :: Input -> Output1
+  part1 (s, buses) = waitTime (read s) 0 $ catMaybes buses
+
+  part2 :: Input -> Output2
+  part2 (_, buses) = consecDeps 0 1 0 busTuples busTuples
+    where busTuples = tail $ countNothings buses 0 0
 
   waitTime :: Int -> Int -> [Int] -> Int
   waitTime time waited buses

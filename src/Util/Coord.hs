@@ -1,4 +1,4 @@
-module Coord where
+module Util.Coord where
   import Data.Set (Set)
   import qualified Data.Set as Set
 

@@ -1,5 +1,8 @@
-{-# LANGUAGE ApplicativeDo   #-}
-module Day12 where
+module Days.Day12 where
+  import qualified Program.RunDay as R (runDay)
+
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
 
   data Action = North Int
               | South Int
@@ -9,13 +12,21 @@ module Day12 where
               | Forward Int
               deriving (Show, Eq)
 
-  main :: IO ()
-  main = do
-    actions <- map getActionPairs . lines <$> readFile "input.txt"
-    let (x1,y1) = moveShip actions (0,0) 90
-    print $ abs x1 + abs y1
-    let (x2,y2) = moveShip2 actions (0,0) (10, 1)
-    print $ abs x2 + abs y2
+  type Input = [Action]
+
+  type Output1 = Int
+  type Output2 = Int
+
+  parser :: String -> Input
+  parser = map getActionPairs . lines
+
+  part1 :: Input -> Output1
+  part1 actions = abs x + abs y
+    where (x,y) = moveShip actions (0,0) 90
+
+  part2 :: Input -> Output2
+  part2 actions = abs x + abs y
+    where (x,y) = moveShip2 actions (0,0) (10, 1)
 
   getActionPairs :: String -> Action
   getActionPairs (a:n) = case a of

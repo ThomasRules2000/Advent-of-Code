@@ -1,4 +1,4 @@
-module Day20 where
+module Days.Day20 where
   import Data.List.Split
   import Data.Vector (Vector)
   import qualified Data.Vector as Vec
@@ -8,33 +8,42 @@ module Day20 where
   import qualified Data.Set as Set
   import Data.IntMap.Strict (IntMap)
   import qualified Data.IntMap.Strict as IntMap
-  import Tile (Tile(Tile))
-  import qualified Tile
-  import Data.Maybe
+  import Util.Tile (Tile(Tile))
+  import qualified Util.Tile as Tile
+  import qualified Program.RunDay as R (runDay)
+  import Data.Bifunctor
 
-  main :: IO ()
-  main = do
-    tiles <- Vec.fromList . map processTile . splitOn "\n\n" <$> readFile "input.txt"
-    let matches = countMatches tiles (Tile.getSidePerms <$> tiles)
-    let tileMatrix = constructMap
-                   $ IntMap.fromList
-                   $ Vec.toList
-                   $ Vec.map (toMap . fmap (Vec.map fst . Vec.filter ((>0) . snd) . Vec.zip (Vec.map (Tile.tileNum . fst) matches))) matches
-    let habitat = foldr1 (Matrix.<|>)
-                $ map (foldr1 (Matrix.<->) . map Tile.getInside)
-                $ Matrix.toLists
-                $ Matrix.mapPos (alignTile tileMatrix) tileMatrix
-    putStr $ Tile.ppMatrix habitat
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
 
-    print $ Vec.product
-          $ Vec.map fst
-          $ Vec.filter ((==2).snd)
-          $ Vec.map (mapFst Tile.tileNum . fmap (Vec.length . Vec.filter (>0))) matches
+  type Input = (Vector (Tile, Vector Int), Matrix Bool)
 
-    print $ length (filter id $ Matrix.toList habitat) - 15 * length (filter id $ concatMap (\m -> Matrix.toList $ Matrix.mapPos (isMonster m) m) $ Tile.getDihedralGroup habitat)
+  type Output1 = Int
+  type Output2 = Int
 
-  mapFst :: (a -> b) -> (a,c) -> (b,c)
-  mapFst f (x,y) = (f x, y)
+  parser :: String -> Input
+  parser s = (matches, habitat)
+    where
+      tiles = Vec.fromList $ map processTile $ splitOn "\n\n" s
+      matches = countMatches tiles (Tile.getSidePerms <$> tiles)
+      tileMatrix = constructMap
+                 $ IntMap.fromList
+                 $ Vec.toList
+                 $ Vec.map (toMap . fmap (Vec.map fst . Vec.filter ((>0) . snd) . Vec.zip (Vec.map (Tile.tileNum . fst) matches))) matches
+      habitat = foldr1 (Matrix.<|>)
+              $ map (foldr1 (Matrix.<->) . map Tile.getInside)
+              $ Matrix.toLists
+              $ Matrix.mapPos (alignTile tileMatrix) tileMatrix
+
+  part1 :: Input -> Output1
+  part1 (matches, _) = Vec.product
+                     $ Vec.map fst
+                     $ Vec.filter ((==2).snd)
+                     $ Vec.map (first Tile.tileNum . fmap (Vec.length . Vec.filter (>0))) matches
+
+  part2 :: Input -> Output2
+  part2 (_, habitat) = length (filter id $ Matrix.toList habitat) 
+                     - 15 * length (filter id $ concatMap (\m -> Matrix.toList $ Matrix.mapPos (isMonster m) m) $ Tile.getDihedralGroup habitat)
 
   processTile :: String -> Tile
   processTile s = Tile (read $ init $ drop 5 num) (Matrix.fromLists $ map (=='#') <$> tile)

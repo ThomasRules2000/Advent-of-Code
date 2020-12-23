@@ -1,11 +1,23 @@
-module Day18 where
+module Days.Day18 where
   import Data.Char
+  import qualified Program.RunDay as R (runDay)
 
-  main :: IO ()
-  main = do
-    exprs <- lines <$> readFile "input.txt"
-    print $ sum $ map (snd . flip calcExpr 0 . filter (/= ' ')) exprs
-    print $ sum $ map (snd . parseE . filter (/= ' ')) exprs
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
+
+  type Input = [String ]
+
+  type Output1 = Int
+  type Output2 = Int
+
+  parser :: String -> Input
+  parser = lines
+
+  part1 :: Input -> Output1
+  part1 = sum . map (snd . flip calcExpr 0 . filter (/= ' '))
+
+  part2 :: Input -> Output2
+  part2 = sum . map (snd . parseE . filter (/= ' '))
 
   calcExpr :: String -> Int -> (String, Int)
   calcExpr "" acc = ("", acc)

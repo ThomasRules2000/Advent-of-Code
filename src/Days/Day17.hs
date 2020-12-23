@@ -1,16 +1,28 @@
-module Day17Generic where
+module Days.Day17 where
   import Data.Vector (Vector)
   import qualified Data.Vector as Vec
   import Data.Set (Set)
   import qualified Data.Set as Set
   import Data.Maybe
-  import Coord
+  import Util.Coord
+  import qualified Program.RunDay as R (runDay)
 
-  main :: IO ()
-  main = do
-    input <- map Vec.fromList . lines <$> readFile "input.txt"
-    print $ Set.size $ doNCycles 6 (getInitialConfig input :: Set Coord3D)
-    print $ Set.size $ doNCycles 6 (getInitialConfig input :: Set Coord4D)
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
+
+  type Input = [Vector Char]
+
+  type Output1 = Int
+  type Output2 = Int
+
+  parser :: String -> Input
+  parser = map Vec.fromList . lines
+
+  part1 :: Input -> Output1
+  part1 input = Set.size $ doNCycles 6 (getInitialConfig input :: Set Coord3D)
+
+  part2 :: Input -> Output2
+  part2 input = Set.size $ doNCycles 6 (getInitialConfig input :: Set Coord4D)
 
   getInitialConfig :: (Coord c) => [Vector Char] -> Set c
   getInitialConfig vs = go vs 0 []

@@ -1,19 +1,32 @@
-{-# LANGUAGE ApplicativeDo   #-}
-module Day10 where
+module Days.Day10 where
   import Data.List (sort)
   import Data.Sequence (Seq(..), (|>), (<|), ViewR(..))
   import qualified Data.Sequence as Seq
   import Data.Map.Strict (Map)
   import qualified Data.Map.Strict as Map
   import Data.List.Split
+  import qualified Program.RunDay as R (runDay)
 
-  main :: IO ()
-  main = do
-    adapters <- Seq.fromList . sort . map read . lines <$> readFile "input.txt" :: IO (Seq Int)
-    let (_:>devJolts) = (+3) <$> Seq.viewr adapters
-    let differences = getDifferences devJolts adapters
-    print $ Seq.length (Seq.filter (==1) differences) * Seq.length (Seq.filter (==3) differences)
-    print $ dynamicProgramming (Map.singleton devJolts 1) $ 0 <| adapters
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
+
+  type Input = (Seq Int, Int, Seq Int)
+
+  type Output1 = Int
+  type Output2 = Int
+
+  parser :: String -> Input
+  parser inp = (adapters, devJolts, differences) 
+    where
+      adapters = Seq.fromList $ sort $ map read $ lines inp :: Seq Int
+      (_:>devJolts) = (+3) <$> Seq.viewr adapters
+      differences = getDifferences devJolts adapters
+
+  part1 :: Input -> Output1
+  part1 (_, _, differences) = Seq.length (Seq.filter (==1) differences) * Seq.length (Seq.filter (==3) differences)
+
+  part2 :: Input -> Output2
+  part2 (adapters, devJolts, _) = dynamicProgramming (Map.singleton devJolts 1) $ 0 <| adapters 
 
   getDifferences :: Int -> Seq Int -> Seq Int
   getDifferences devJolts ss = Seq.zipWith (-) (ss |> devJolts) (0 <| ss)

@@ -1,23 +1,33 @@
 {-# LANGUAGE ApplicativeDo   #-}
-module Day8 where
+module Days.Day08 where
   import Data.Vector (Vector)
   import qualified Data.Vector as Vec
   import Data.IntSet (IntSet)
   import qualified Data.IntSet as IntSet
+  import Util.Util
+  import qualified Program.RunDay as R (runDay)
+
+  runDay :: String -> IO ()
+  runDay = R.runDay parser part1 part2
+
+  type Input = Vector Instruction
+
+  type Output1 = Int
+  type Output2 = Int
 
   data Instruction = Jmp Int
                    | Acc Int
                    | Nop Int
                    deriving (Eq, Show)
 
-  main :: IO ()
-  main = do
-    prog <- Vec.fromList . map (getInstruction . listToTuple . words) . lines <$> readFile "input.txt"
-    print $ fst $ runProg 0 0 prog IntSet.empty
-    print $ findCorrect 0 prog
+  parser :: String -> Input
+  parser = Vec.fromList . map (getInstruction . listToTuple . words) . lines
 
-  listToTuple :: [a] -> (a,a)
-  listToTuple [x,y] = (x,y)
+  part1 :: Input -> Output1
+  part1 = fst . runProg 0 0 IntSet.empty
+
+  part2 :: Input -> Output2
+  part2 = findCorrect 0
 
   getInstruction :: (String, String) -> Instruction
   getInstruction (opcode, whole@(sign:num)) = case opcode of
@@ -28,21 +38,21 @@ module Day8 where
               '+' -> read num
               '-' -> read whole
 
-  runProg :: Int -> Int -> Vector Instruction -> IntSet -> (Int, Bool)
-  runProg n acc prog set
+  runProg :: Int -> Int -> IntSet -> Vector Instruction -> (Int, Bool)
+  runProg n acc set prog
     | n >= length prog = (acc, True)
     | IntSet.member n set = (acc, False)
     | otherwise = case prog Vec.! n of
-        Jmp operand -> runProg (n+operand) acc prog newSet
-        Acc operand -> runProg (n+1) (acc+operand) prog newSet
-        Nop operand -> runProg (n+1) acc prog newSet
+        Jmp operand -> runProg (n+operand) acc newSet prog
+        Acc operand -> runProg (n+1) (acc+operand) newSet prog
+        Nop operand -> runProg (n+1) acc newSet prog
     where newSet = IntSet.insert n set
 
   findCorrect :: Int -> Vector Instruction -> Int
   findCorrect n prog = case prog Vec.! n of
     Acc _ -> nextIndex
     Jmp operand -> if term then acc else nextIndex
-      where (acc, term) = runProg 0 0 (prog Vec.// [(n, Nop operand)]) IntSet.empty
+      where (acc, term) = runProg 0 0 IntSet.empty $ prog Vec.// [(n, Nop operand)]
     Nop operand -> if term then acc else nextIndex
-      where (acc, term) = runProg 0 0 (prog Vec.// [(n, Jmp operand)]) IntSet.empty
+      where (acc, term) = runProg 0 0 IntSet.empty $ prog Vec.// [(n, Jmp operand)]
     where nextIndex = findCorrect (n+1) prog

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 88ad1a3683b2dc6441086343346b2b67369905a91c66217adf32249ec995a2e8
+-- hash: ee2715dc2fcf1f1319eb3008e7897ced31b381e909383e1e7265b3d2b1c6737c
 
 name:           Advent-of-Code
 version:        0.1.0.0
@@ -55,20 +55,22 @@ library
       Util.Field
       Util.Pair
       Util.Tile
+      Util.Util
   other-modules:
       Paths_Advent_of_Code
   hs-source-dirs:
       src
-  default-extensions: ApplicativeDo
+  default-extensions: ApplicativeDo TupleSections
   build-depends:
       base >=4.7 && <5
     , containers ==0.6.0.1
+    , extra ==1.6.18
     , matrix ==0.3.6.1
     , split >=0.2.3
     , vector ==0.12.0.3
   default-language: Haskell2010
 
-executable Cskell-exe
+executable AOC-exe
   main-is: Main.hs
   other-modules:
       Paths_Advent_of_Code
@@ -79,6 +81,7 @@ executable Cskell-exe
       Advent-of-Code
     , base >=4.7 && <5
     , containers ==0.6.0.1
+    , extra ==1.6.18
     , matrix ==0.3.6.1
     , split >=0.2.3
     , vector ==0.12.0.3

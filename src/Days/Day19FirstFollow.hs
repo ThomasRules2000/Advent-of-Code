@@ -1,4 +1,4 @@
-module Day19New where
+module Days.Day19FirstFollow where
   import Data.List.Split
   import Data.Map.Strict (Map)
   import qualified Data.Map.Strict as Map
@@ -78,5 +78,5 @@ module Day19New where
         | otherwise = fromJust $ Map.lookup r followSets
 
 
-  wordInLang :: Map Int (Either Char [[Int]]) -> Map Int (Set Char) -> Map Int (Set Char) String -> Bool
-  wordInLang rules firstSets followSets word = False
+  --wordInLang :: Map Int (Either Char [[Int]]) -> Map Int (Set Char) -> Map Int (Set Char) String -> Bool
+  --wordInLang rules firstSets followSets word = False
