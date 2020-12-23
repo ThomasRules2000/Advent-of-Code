@@ -9,13 +9,15 @@ module Day17Generic where
   main :: IO ()
   main = do
     input <- map Vec.fromList . lines <$> readFile "input.txt"
-    print $ Set.size $ doNCycles 6 (getInitialConfig input 0 [] :: Set Coord3D)
-    print $ Set.size $ doNCycles 6 (getInitialConfig input 0 [] :: Set Coord4D)
+    print $ Set.size $ doNCycles 6 (getInitialConfig input :: Set Coord3D)
+    print $ Set.size $ doNCycles 6 (getInitialConfig input :: Set Coord4D)
 
-  getInitialConfig :: (Coord c) => [Vector Char] -> Int -> [[Maybe c]] -> Set c
-  getInitialConfig [] _ is = Set.fromList $ catMaybes $ concat is
-  getInitialConfig (v:vs) n is = getInitialConfig vs (n+1) $ (Vec.toList (Vec.imap (getIndex n) v)):is
+  getInitialConfig :: (Coord c) => [Vector Char] -> Set c
+  getInitialConfig vs = go vs 0 []
     where
+      go :: (Coord c) => [Vector Char] -> Int -> [[Maybe c]] -> Set c
+      go [] _ is = Set.fromList $ catMaybes $ concat is
+      go (v:vs) n is = go vs (n+1) $ Vec.toList (Vec.imap (getIndex n) v):is
       getIndex :: (Coord c) => Int -> Int -> Char -> Maybe c
       getIndex x y c
         | c == '#' = Just $ from2D (x,y)

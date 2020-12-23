@@ -29,5 +29,5 @@ module Day19Alternative where
     where
       doParse :: IntMap (Either Char [[Int]]) -> Int -> String -> [String]
       doParse rMap rule str@(s:ss) = case fromJust $ IntMap.lookup rule rMap of
-        Left c -> if s == c then [ss] else []
+        Left c -> [ss | s == c]
         Right rss -> rss >>= foldl (parseWithRule rMap) [str]

@@ -1,6 +1,7 @@
 {-# LANGUAGE ApplicativeDo   #-}
 module Day4 where
-  import qualified Data.Map as Map
+  import Data.Map.Strict (Map)
+  import qualified Data.Map.Strict as Map
   import Data.List.Split
   import Text.Read
   import Data.Maybe
@@ -8,20 +9,16 @@ module Day4 where
   main :: IO ()
   main = do
     passports <- map ((Map.fromList . map (listToTuple . splitOn ":")) . words) . splitOn "\n\n" <$> readFile "input.txt"
-    print $ length passports
-    print $ length $ filter (containsKeys ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]) passports
+    print $ length $ filter (`containsKeys` ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]) passports
     print $ length $ filter (fromMaybe False . validateFields) passports
 
   listToTuple :: [a] -> (a,a)
   listToTuple [x,y] = (x,y)
 
-  containsKeys :: Ord k => [k] -> Map.Map k v -> Bool
-  containsKeys [] _ = True
-  containsKeys (k:ks) m = case Map.lookup k m of
-    Just _ -> containsKeys ks m
-    Nothing -> False
+  containsKeys :: Ord k =>  Map k v -> [k] -> Bool
+  containsKeys m = all (`Map.member` m)
 
-  validateFields :: Map.Map String String -> Maybe Bool
+  validateFields :: Map String String -> Maybe Bool
   validateFields m = do
     byr <- read <$> Map.lookup "byr" m :: Maybe Int
     iyr <- read <$> Map.lookup "iyr" m :: Maybe Int

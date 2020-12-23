@@ -1,6 +1,4 @@
 module Day17 where
-  import Data.Map.Strict (Map)
-  import qualified Data.Map.Strict as Map
   import Data.Vector (Vector)
   import qualified Data.Vector as Vec
   import Data.Set (Set)

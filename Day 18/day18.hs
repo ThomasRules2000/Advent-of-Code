@@ -1,6 +1,4 @@
 module Day18 where
-  import Data.Vector (Vector)
-  import qualified Data.Vector as Vec
   import Data.Char
 
   main :: IO ()
@@ -30,9 +28,8 @@ module Day18 where
     parseE' s1 v
 
   parseT :: String -> (String, Int)
-  parseT s = do
-    let (s1, v) = parseV s
-    parseT' s1 v
+  parseT s = let (s1, v) = parseV s in
+              parseT' s1 v
 
   parseV :: String -> (String, Int)
   parseV ('(':s) = let (s1, v) = parseE s in (tail s1, v)

@@ -1,8 +1,8 @@
 module Field where
-  import Data.Set
+  import Data.IntSet
 
   data Field = Field { fieldName :: String,
-                       fieldSet  :: Set Int
+                       fieldSet  :: IntSet
                      } deriving ()
 
   instance Show Field where

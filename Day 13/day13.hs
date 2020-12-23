@@ -1,36 +1,28 @@
+{-# LANGUAGE ApplicativeDo   #-}
 module Day13 where
   import Data.List.Split
-  import Data.List
   import Data.Maybe
-  import Text.Read
-
--- (x1,t1), (x2,t2), (x3,t3)
--- t0 % x1 == t0+t1 % x2 == t0+t1+t2 % x3
+  import Text.Read (readMaybe)
 
   main :: IO ()
   main = do
     [s, b] <- lines <$> readFile "input.txt"
-    let buses = fromMaybe 0 . readMaybe <$> splitOn "," b :: [Int]
-    print $ waitTime (read s) 0 $ filter (/=0) buses
-    let busTuples = tail $ count0s buses 0 0
+    let buses = readMaybe <$> splitOn "," b :: [Maybe Int]
+    print $ waitTime (read s) 0 $ catMaybes buses
+    let busTuples = tail $ countNothings buses 0 0
     print $ consecDeps 0 1 0 busTuples busTuples
 
   waitTime :: Int -> Int -> [Int] -> Int
-  waitTime time waited buses = case checkBuses time buses of
-    Nothing -> waitTime (time+1) (waited+1) buses
-    Just bus -> waited*bus
-    where
-      checkBuses :: Int -> [Int] -> Maybe Int
-      checkBuses _ [] = Nothing
-      checkBuses time (b:bs)
-        | time `mod` b == 0 = Just b
-        | otherwise = checkBuses time bs
+  waitTime time waited buses
+    | null arriving = waitTime (time + 1) (waited + 1) buses
+    | otherwise = waited * head arriving
+    where arriving = filter (\b -> time `mod` b == 0) buses
 
-  count0s :: [Int] -> Int -> Int -> [(Int, Int)]
-  count0s [] n c = [(n,c)]
-  count0s (x:xs) n c
-    | x == 0 = count0s xs n $ c+1
-    | otherwise = (n,c):count0s xs x 1
+  countNothings :: [Maybe Int] -> Int -> Int -> [(Int, Int)]
+  countNothings [] n c = [(n,c)]
+  countNothings (x:xs) n c = case x of
+    Nothing -> countNothings xs n $ c+1
+    Just y -> (n,c):countNothings xs y 1
 
   consecDeps :: Int -> Int -> Int -> [(Int,Int)] -> [(Int,Int)] -> Int
   consecDeps start _ _ [] _ = start

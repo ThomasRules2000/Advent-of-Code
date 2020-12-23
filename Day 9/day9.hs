@@ -1,28 +1,25 @@
 {-# LANGUAGE ApplicativeDo   #-}
 module Day9 where
-  import Data.Vector (Vector)
-  import qualified Data.Vector as Vec
+  import Data.Sequence (Seq(..), (|>), (<|))
+  import qualified Data.Sequence as Seq
 
   main :: IO ()
   main = do
-    nums <- map read . lines <$> readFile "input.txt" :: IO [Int]
-    let invalid = findInvalid (drop 25 nums) (Vec.fromListN 25 nums)
+    nums <- Seq.fromList . map read . lines <$> readFile "input.txt" :: IO (Seq Int)
+    let invalid = uncurry findInvalid $ Seq.splitAt 25 nums
     print invalid
     print $ findWeakness invalid nums
 
-  isValid :: Int -> Vector Int -> Bool
-  isValid n vec = n `elem` [x+y | x <- Vec.toList vec, y <- Vec.toList vec]
-
-  findInvalid :: [Int] -> Vector Int -> Int
-  findInvalid (x:xs) vec
-    | isValid x vec = findInvalid xs $ Vec.tail vec `Vec.snoc` x
+  findInvalid :: Seq Int -> Seq Int -> Int
+  findInvalid ss@(_:<|rest) (x:<|xs)
+    | isValid x ss = findInvalid (rest|>x) xs
     | otherwise = x
+    where
+      isValid :: Int -> Seq Int -> Bool
+      isValid n ss = elem n $ do { x <- ss; y <- ss; return (x+y) }
 
-  findWeakness :: Int -> [Int] -> Int
-    findWeakness n xs = case Vec.findIndex (==n) $ Vec.imap sumN $ Vec.replicate (length xs - 1) xs of
-    Nothing -> findWeakness n $ tail xs
+  findWeakness :: Int -> Seq Int -> Int
+  findWeakness n xs@(_:<|ts) = case Seq.elemIndexL n $ Seq.scanl (+) 0 xs of
+    Nothing -> findWeakness n ts
     Just i -> maximum range + minimum range
-      where range = take i xs
-
-  sumN :: Num a => Int -> [a] -> a
-  sumN n xs = sum $ take (n+2) xs
+      where range = Seq.take i xs

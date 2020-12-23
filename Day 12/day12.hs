@@ -13,10 +13,9 @@ module Day12 where
   main = do
     actions <- map getActionPairs . lines <$> readFile "input.txt"
     let (x1,y1) = moveShip actions (0,0) 90
-    print $ (abs x1) + (abs y1)
+    print $ abs x1 + abs y1
     let (x2,y2) = moveShip2 actions (0,0) (10, 1)
-    print (x2, y2)
-    print $ (abs x2) + (abs y2)
+    print $ abs x2 + abs y2
 
   getActionPairs :: String -> Action
   getActionPairs (a:n) = case a of
@@ -27,7 +26,6 @@ module Day12 where
     'L' -> Rotate $ negate num
     'R' -> Rotate num
     'F' -> Forward num
-    _ -> error "Invalid char"
     where num = read n :: Int
 
   moveShip :: [Action] -> (Int, Int) -> Int -> (Int, Int)
