@@ -1,14 +1,14 @@
 module Days.Day23 where
 
 import           Data.Char
-import Data.List
-import Data.Maybe
-import Util.Util
-import Data.IntMap.Strict (IntMap)
+import           Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
-import qualified Program.RunDay as R (runDay)
+import           Data.List
+import           Data.Maybe
+import qualified Program.RunDay     as R (runDay)
+import           Util.Util
 
-import Debug.Trace
+import           Debug.Trace
 
 runDay :: String -> IO ()
 runDay = R.runDay parser part1 part2
@@ -31,7 +31,7 @@ getList cupMap val = val : getList cupMap next
     where next = cupMap IntMap.! val
 
 doMove :: Int -> (IntMap Int, Int) -> (IntMap Int, Int)
-doMove maxCup (cupMap, currCup) = (newMap, newMap IntMap.! currCup)  
+doMove maxCup (cupMap, currCup) = (newMap, newMap IntMap.! currCup)
     where
         newMap =  IntMap.insert destCup cup1 $ IntMap.insert cup3 afterDest $ IntMap.insert currCup afterCup3 cupMap
         cup1 = cupMap IntMap.! currCup
