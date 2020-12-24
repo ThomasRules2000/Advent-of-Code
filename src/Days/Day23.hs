@@ -6,16 +6,15 @@ import qualified Data.IntMap.Strict as IntMap
 import           Data.List
 import           Data.Maybe
 import qualified Program.RunDay     as R (runDay)
+import           Util.NoQuotes
 import           Util.Util
-
-import           Debug.Trace
 
 runDay :: String -> IO ()
 runDay = R.runDay parser part1 part2
 
 type Input = (IntMap Int, Int)
 
-type Output1 = String
+type Output1 = NoQuotes
 
 type Output2 = Int
 
@@ -24,7 +23,7 @@ parser s = (IntMap.fromList $ zip inp $ rotate 1 inp, head inp)
     where inp = map digitToInt s
 
 part1 :: Input -> Output1
-part1 inp = tail $ take 9 $ concatMap show $ getList (fst $ iterate (doMove 9) inp !! 100) 1
+part1 inp = NoQuotes $ tail $ take 9 $ concatMap show $ getList (fst $ iterate (doMove 9) inp !! 100) 1
 
 getList :: IntMap Int -> Int -> [Int]
 getList cupMap val = val : getList cupMap next

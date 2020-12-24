@@ -6,6 +6,7 @@ import qualified Data.Map.Strict as Map
 import           Data.Set        (Set)
 import qualified Data.Set        as Set
 import qualified Program.RunDay  as R (runDay)
+import           Util.NoQuotes
 import           Util.Util
 
 runDay :: String -> IO ()
@@ -14,7 +15,7 @@ runDay = R.runDay parser part1 part2
 type Input = ([(Set String, Set String)], Map String (Set String))
 
 type Output1 = Int
-type Output2 = String
+type Output2 = NoQuotes
 
 parser :: String -> Input
 parser s = (allergIngPairs, possPairs)
@@ -26,7 +27,7 @@ part1 :: Input -> Output1
 part1 (allergIngPairs, possPairs) = sum (map (Set.size . flip Set.difference (Set.unions $ map snd $ Map.toList possPairs) . fst) allergIngPairs)
 
 part2 :: Input -> Output2
-part2 (_, possPairs) = intercalate "," $ map snd $ Map.toList $ getMatching (Map.toList possPairs)
+part2 (_, possPairs) = NoQuotes $ intercalate "," $ map snd $ Map.toList $ getMatching (Map.toList possPairs)
 
 main :: IO ()
 main = do

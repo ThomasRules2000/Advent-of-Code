@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 473002f6a8e46b9e38444f04d5e15c94cd8cf4638bda521b93f9bc1808f12cc4
+-- hash: dfa60462082cd8576c0acc8ce7fc52f3b05031a5f8586425e1eb0fcd03d77c50
 
 name:           Advent-of-Code
 version:        0.1.0.0
@@ -57,8 +57,8 @@ library
       Util.Coord
       Util.Field
       Util.HexTile
+      Util.NoQuotes
       Util.Pair
-      Util.ShowString
       Util.Tile
       Util.Util
   other-modules:
