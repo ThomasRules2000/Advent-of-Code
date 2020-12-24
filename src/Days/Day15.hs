@@ -2,6 +2,7 @@ module Days.Day15 where
   import Data.IntMap.Strict (IntMap)
   import qualified Data.IntMap.Strict as IntMap
   import Data.Tuple.Extra
+  import Data.List.Split
   import qualified Program.RunDay as R (runDay)
 
   runDay :: String -> IO ()
@@ -12,11 +13,9 @@ module Days.Day15 where
   type Output1 = Int
   type Output2 = Int
 
-  startingNumbers :: [Int]
-  startingNumbers = [11,0,1,10,5,19]
-
   parser :: String -> Input
-  parser = const (length startingNumbers, last startingNumbers, IntMap.fromList $ init $ zip startingNumbers [0..])
+  parser s = (length startingNos, last startingNos, IntMap.fromList $ init $ zip startingNos [0..])
+    where startingNos = read <$> splitOn "," s :: [Int]
 
   part1 :: Input -> Output1
   part1 = uncurry3 (doTurn 2020)

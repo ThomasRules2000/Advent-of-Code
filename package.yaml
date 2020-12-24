@@ -31,6 +31,9 @@ library:
   default-extensions:
     - ApplicativeDo
     - TupleSections
+    - NumericUnderscores
+    - TypeSynonymInstances
+    - FlexibleInstances
 
 executables:
   AOC-exe:

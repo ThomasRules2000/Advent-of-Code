@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ee2715dc2fcf1f1319eb3008e7897ced31b381e909383e1e7265b3d2b1c6737c
+-- hash: 473002f6a8e46b9e38444f04d5e15c94cd8cf4638bda521b93f9bc1808f12cc4
 
 name:           Advent-of-Code
 version:        0.1.0.0
@@ -50,17 +50,22 @@ library
       Days.Day20
       Days.Day21
       Days.Day22
+      Days.Day23
+      Days.Day24
+      Days.Day25
       Program.RunDay
       Util.Coord
       Util.Field
+      Util.HexTile
       Util.Pair
+      Util.ShowString
       Util.Tile
       Util.Util
   other-modules:
       Paths_Advent_of_Code
   hs-source-dirs:
       src
-  default-extensions: ApplicativeDo TupleSections
+  default-extensions: ApplicativeDo TupleSections NumericUnderscores TypeSynonymInstances FlexibleInstances
   build-depends:
       base >=4.7 && <5
     , containers ==0.6.0.1

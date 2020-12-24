@@ -19,10 +19,10 @@ module Days.Day17 where
   parser = map Vec.fromList . lines
 
   part1 :: Input -> Output1
-  part1 input = Set.size $ doNCycles 6 (getInitialConfig input :: Set Coord3D)
+  part1 input = Set.size $ (!!6) $ iterate (processCycle (\n -> n /= 2 && n /= 3) (==3)) (getInitialConfig input :: Set Coord3D)
 
   part2 :: Input -> Output2
-  part2 input = Set.size $ doNCycles 6 (getInitialConfig input :: Set Coord4D)
+  part2 input = Set.size $ (!!6) $ iterate (processCycle (\n -> n /= 2 && n /= 3) (==3)) (getInitialConfig input :: Set Coord4D)
 
   getInitialConfig :: (Coord c) => [Vector Char] -> Set c
   getInitialConfig vs = go vs 0 []
@@ -34,24 +34,3 @@ module Days.Day17 where
       getIndex x y c
         | c == '#' = Just $ from2D (x,y)
         | otherwise = Nothing
-
-  getActiveAround :: (Coord c) => c -> Set c -> Int
-  getActiveAround coord set = length $ filter id $ zipWith Set.member iAround $ replicate (length iAround) set
-    where iAround = Set.toList $ Set.delete coord $ getNeighbours coord
-
-  processCycle :: (Coord c) => Set c -> Set c
-  processCycle set = processNodes toProcess set
-    where
-      toProcess = Set.toList $ Set.unions $ map getNeighbours $ Set.toList set
-      processNodes :: (Coord c) => [c] -> Set c -> Set c
-      processNodes [] prev = prev
-      processNodes (c:cs) prev
-        | Set.member c prev = if numActive /= 2 && numActive /= 3 then Set.delete c next else next
-        | otherwise = if numActive == 3 then Set.insert c next else next
-        where
-          numActive = getActiveAround c prev
-          next = processNodes cs prev
-
-  doNCycles :: (Coord c) => Int -> Set c -> Set c
-  doNCycles 0 set = set
-  doNCycles n set = doNCycles (n-1) $ processCycle set
