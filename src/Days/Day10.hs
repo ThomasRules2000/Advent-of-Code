@@ -7,7 +7,7 @@ import           Data.Sequence   (Seq (..), ViewR (..), (<|), (|>))
 import qualified Data.Sequence   as Seq
 import qualified Program.RunDay  as R (runDay)
 
-runDay :: String -> IO ()
+runDay :: String -> IO (Maybe Double, Maybe Double)
 runDay = R.runDay parser part1 part2
 
 type Input = (Seq Int, Int, Seq Int)

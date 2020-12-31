@@ -6,7 +6,7 @@ import           Data.List.Split
 import           Data.Maybe         (fromJust)
 import qualified Program.RunDay     as R (runDay)
 
-runDay :: String -> IO ()
+runDay :: String -> IO (Maybe Double, Maybe Double)
 runDay = R.runDay parser part1 part2
 
 type RuleMap = IntMap (Either Char [[Int]])

@@ -9,7 +9,7 @@ import qualified Program.RunDay  as R (runDay)
 import           Util.NoQuotes
 import           Util.Util
 
-runDay :: String -> IO ()
+runDay :: String -> IO (Maybe Double, Maybe Double)
 runDay = R.runDay parser part1 part2
 
 type Input = ([(Set String, Set String)], Map String (Set String))

@@ -5,7 +5,7 @@ import           Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import qualified Program.RunDay  as R (runDay)
 
-runDay :: String -> IO ()
+runDay :: String -> IO (Maybe Double, Maybe Double)
 runDay = R.runDay parser part1 part2
 
 data Instruction = Mem Int Int

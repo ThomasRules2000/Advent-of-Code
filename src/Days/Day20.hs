@@ -13,7 +13,7 @@ import qualified Program.RunDay     as R (runDay)
 import           Util.Tile          (Tile (Tile))
 import qualified Util.Tile          as Tile
 
-runDay :: String -> IO ()
+runDay :: String -> IO (Maybe Double, Maybe Double)
 runDay = R.runDay parser part1 part2
 
 type Input = (Vector (Tile, Vector Int), Matrix Bool)

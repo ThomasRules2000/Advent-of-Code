@@ -4,7 +4,7 @@ import qualified Data.IntSet     as IntSet
 import           Data.List.Split
 import qualified Program.RunDay  as R (runDay)
 
-runDay :: String -> IO ()
+runDay :: String -> IO (Maybe Double, Maybe Double)
 runDay = R.runDay parser part1 part2
 
 type Input = [[IntSet]]

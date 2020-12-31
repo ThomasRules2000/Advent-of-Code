@@ -2,7 +2,7 @@ module Days.Day05 where
 import           Data.List      (sort)
 import qualified Program.RunDay as R (runDay)
 
-runDay :: String -> IO ()
+runDay :: String -> IO (Maybe Double, Maybe Double)
 runDay = R.runDay parser part1 part2
 
 type Input = [Int]

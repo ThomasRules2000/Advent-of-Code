@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: dfa60462082cd8576c0acc8ce7fc52f3b05031a5f8586425e1eb0fcd03d77c50
+-- hash: 9d6607e872ad672e042645fb6e5bd171bab9d4be0dca262d54ed386ddbc7322a
 
 name:           Advent-of-Code
 version:        0.1.0.0
@@ -65,10 +65,11 @@ library
       Paths_Advent_of_Code
   hs-source-dirs:
       src
-  default-extensions: ApplicativeDo TupleSections NumericUnderscores TypeSynonymInstances FlexibleInstances
+  default-extensions: ApplicativeDo TupleSections NumericUnderscores TypeSynonymInstances FlexibleInstances ScopedTypeVariables
   build-depends:
       base >=4.7 && <5
     , containers ==0.6.0.1
+    , deepseq
     , extra ==1.6.18
     , matrix ==0.3.6.1
     , split >=0.2.3
@@ -86,6 +87,7 @@ executable AOC-exe
       Advent-of-Code
     , base >=4.7 && <5
     , containers ==0.6.0.1
+    , deepseq
     , extra ==1.6.18
     , matrix ==0.3.6.1
     , split >=0.2.3

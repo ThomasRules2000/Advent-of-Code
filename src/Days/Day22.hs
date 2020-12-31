@@ -11,7 +11,7 @@ import qualified Data.Vector     as Vec
 import qualified Program.RunDay  as R (runDay)
 import           Util.Util
 
-runDay :: String -> IO ()
+runDay :: String -> IO (Maybe Double, Maybe Double)
 runDay = R.runDay parser part1 part2
 
 type Input = (Seq Int, Seq Int)

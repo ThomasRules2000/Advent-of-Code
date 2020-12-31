@@ -11,7 +11,7 @@ import qualified Program.RunDay  as R (runDay)
 import           Util.Field      (Field (..))
 import qualified Util.Field      as Field
 
-runDay :: String -> IO ()
+runDay :: String -> IO (Maybe Double, Maybe Double)
 runDay = R.runDay parser part1 part2
 
 type Input = ([Field], Vector Int, [[Int]], IntSet)
